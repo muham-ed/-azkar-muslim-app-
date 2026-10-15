@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 
 class PrayerItem {
   final String name;
@@ -19,20 +20,72 @@ class PrayerProvider with ChangeNotifier {
 
   PrayerItem? _nextPrayer;
   List<PrayerItem> _todayPrayers = [];
+  String _selectedCity = 'القاهرة (مصر)';
+  bool _isLoadingApi = false;
 
   PrayerItem? get nextPrayer => _nextPrayer;
   List<PrayerItem> get todayPrayers => _todayPrayers;
   Duration get timeUntilNext => _timeUntilNext;
+  String get selectedCity => _selectedCity;
+  bool get isLoadingApi => _isLoadingApi;
 
   PrayerProvider() {
-    _calculatePrayerTimes();
+    _initPrayerTimes();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _updateCountdown());
   }
 
-  void _calculatePrayerTimes() {
+  void _initPrayerTimes() async {
+    _calculateLocalTimes(); // التوقيت المحلي الافتراضي فوراً
+    await fetchLivePrayerTimes('Cairo', 'Egypt');
+  }
+
+  Future<void> fetchLivePrayerTimes(String city, String country) async {
+    _isLoadingApi = true;
+    notifyListeners();
+
+    final liveTimings = await ApiService.fetchPrayerTimes(city: city, country: country);
+
+    if (liveTimings != null) {
+      final now = DateTime.now();
+
+      DateTime parseTime(String timeStr) {
+        final parts = timeStr.split(':');
+        final hour = int.parse(parts[0]);
+        final minute = int.parse(parts[1].split(' ')[0]);
+        return DateTime(now.year, now.month, now.day, hour, minute);
+      }
+
+      String format12h(DateTime dt) {
+        final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+        final ampm = dt.hour >= 12 ? 'م' : 'ص';
+        final minute = dt.minute.toString().padLeft(2, '0');
+        return '${hour.toString().padLeft(2, '0')}:$minute $ampm';
+      }
+
+      final fajrDt = parseTime(liveTimings['Fajr']!);
+      final sunriseDt = parseTime(liveTimings['Sunrise']!);
+      final dhuhrDt = parseTime(liveTimings['Dhuhr']!);
+      final asrDt = parseTime(liveTimings['Asr']!);
+      final maghribDt = parseTime(liveTimings['Maghrib']!);
+      final ishaDt = parseTime(liveTimings['Isha']!);
+
+      _todayPrayers = [
+        PrayerItem(name: 'الفجـر', time: format12h(fajrDt), dateTime: fajrDt),
+        PrayerItem(name: 'الشروق', time: format12h(sunriseDt), dateTime: sunriseDt),
+        PrayerItem(name: 'الظـهر', time: format12h(dhuhrDt), dateTime: dhuhrDt),
+        PrayerItem(name: 'العصـر', time: format12h(asrDt), dateTime: asrDt),
+        PrayerItem(name: 'المغرب', time: format12h(maghribDt), dateTime: maghribDt),
+        PrayerItem(name: 'العشاء', time: format12h(ishaDt), dateTime: ishaDt),
+      ];
+    }
+
+    _isLoadingApi = false;
+    _updateCountdown();
+  }
+
+  void _calculateLocalTimes() {
     final now = DateTime.now();
 
-    // مواقيت الصلاة الاسترشادية الثابتة حسب وقت اليوم
     final fajr = DateTime(now.year, now.month, now.day, 4, 45);
     final sunrise = DateTime(now.year, now.month, now.day, 6, 12);
     final dhuhr = DateTime(now.year, now.month, now.day, 12, 15);
@@ -64,7 +117,6 @@ class PrayerProvider with ChangeNotifier {
     }
 
     if (upcoming == null) {
-      // إذا انتهت صلوات اليوم، فالصلاة القادمة هي الفجر للغد
       final tomorrowFajr = DateTime(now.year, now.month, now.day + 1, 4, 45);
       upcoming = PrayerItem(name: 'الفجـر', time: '04:45 ص', dateTime: tomorrowFajr);
     }
