@@ -220,7 +220,7 @@ class DhikrProvider with ChangeNotifier {
 
       if (dhikr.currentCount < dhikr.targetCount) {
         dhikr.increment();
-        if (await Vibration.hasVibrator() ?? false) {
+        if (await Vibration.hasVibrator() == true) {
           Vibration.vibrate(duration: 45);
         }
         notifyListeners();

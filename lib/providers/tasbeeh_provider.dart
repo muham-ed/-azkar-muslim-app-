@@ -51,7 +51,7 @@ class TasbeehProvider with ChangeNotifier {
   void increment() async {
     _count++;
     _totalCount++;
-    if (await Vibration.hasVibrator() ?? false) {
+    if (await Vibration.hasVibrator() == true) {
       if (_count == _target) {
         Vibration.vibrate(pattern: [0, 100, 50, 100]); // اهتزاز مميز عند اكتمال الهدف
       } else {

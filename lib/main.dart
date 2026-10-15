@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'bootstrap.dart';
 import 'providers/dhikr_provider.dart';
 import 'providers/tasbeeh_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/quran_provider.dart';
 import 'providers/theme_provider.dart';
 
-import 'services/notification_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/main_navigation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService.init();
+  await bootstrapAdhan();
   runApp(const MyApp());
 }
 

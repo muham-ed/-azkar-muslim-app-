@@ -14,16 +14,23 @@ migrate_working_dir/
 
 # Gradle & Build artifacts
 .gradle/
-**/android/.gradle/
+**/.gradle/
 /android/app/debug
 /android/app/profile
 /android/app/release
+build/
+.dart_tool/
+local.properties
+key.properties
+*.jks
+*.keystore
 
 # Temporary non-flutter files
 server.js
 setup_db.js
 flutter.create
 "هيكل المشروع"
+azkar_muslim/
 
 # IntelliJ related
 *.iml
@@ -34,11 +41,8 @@ flutter.create
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
 /coverage/
 
 # Symbolication related

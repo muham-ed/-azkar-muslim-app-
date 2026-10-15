@@ -1,0 +1,12 @@
+
+# --- additions ---
+.gradle/
+**/.gradle/
+build/
+.dart_tool/
+.idea/
+*.iml
+local.properties
+key.properties
+*.jks
+*.keystore

@@ -46,7 +46,7 @@ class AppTheme {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.lightSurface,
         elevation: 2,
         shadowColor: Colors.black.withOpacity(0.06),
@@ -80,7 +80,7 @@ class AppTheme {
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.accentGold),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.darkSurface,
         elevation: 3,
         shadowColor: Colors.black.withOpacity(0.3),

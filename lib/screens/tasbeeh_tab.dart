@@ -38,7 +38,7 @@ class TasbeehTab extends StatelessWidget {
                         selected: isSelected,
                         selectedColor: AppColors.primaryGreen,
                         labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black80),
+                          color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
                           fontWeight: FontWeight.bold,
                         ),
                         onSelected: (_) => tasbeeh.setSelectedPhrase(phrase),

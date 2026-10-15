@@ -1,7 +1,6 @@
 name: azkar_muslim
-description: "A comprehensive, silent, and authentic Islamic companion application."
+description: "Azkar, prayer times (offline), Qibla compass, Quran audio and tasbeeh."
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
@@ -12,19 +11,23 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
+  # موجودة من قبل
   provider: ^6.1.1
   vibration: ^3.2.0
   shared_preferences: ^2.2.2
   google_fonts: ^6.1.0
-  intl: ^0.19.0
-  http: ^1.1.0
-  adhan: ^2.0.0
-  flutter_local_notifications: ^17.1.2
-  timezone: ^0.9.2
-  audioplayers: ^6.0.0
-  flutter_compass: ^0.7.0
-  geolocator: ^12.0.0
+  intl: ^0.20.2
   cupertino_icons: ^1.0.6
+  http: ^1.1.0
+
+  # الجديدة (كانت ناقصة فعلاً)
+  adhan_dart: ^2.0.1                   # حساب المواقيت محلياً بدون إنترنت
+  geolocator: ^13.0.2                  # GPS
+  flutter_compass: ^0.8.1              # حساس البوصلة للقبلة
+  audioplayers: ^6.1.0                 # تشغيل التلاوات
+  flutter_local_notifications: ^18.0.1 # ثبّت على 18.x: الـ API يتغير بين الإصدارات
+  timezone: ^0.9.4
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +36,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/data/azkar.json
