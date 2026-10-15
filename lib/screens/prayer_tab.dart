@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_provider.dart';
 import '../theme/app_theme.dart';
@@ -15,7 +17,7 @@ class PrayerTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 1. Qibla Compass Card
+          // 1. Live Compass Widget with FlutterCompass
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -38,7 +40,7 @@ class PrayerTab extends StatelessWidget {
                     Icon(Icons.explore, color: AppColors.accentGold, size: 24),
                     SizedBox(width: 8),
                     Text(
-                      'اتجاه القبلة المباشر (مكة المكرمة)',
+                      'بوصلة اتجاه القبلة المباشرة',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -47,38 +49,62 @@ class PrayerTab extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primaryGreen.withOpacity(0.08),
-                        border: Border.all(color: AppColors.primaryGreen, width: 2),
-                      ),
-                    ),
-                    const Column(
-                      mainAxisSize: MainAxisSize.min,
+
+                StreamBuilder<CompassEvent>(
+                  stream: FlutterCompass.events,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('خطأ في حاساس البوصلة للجهاز');
+                    }
+
+                    double? heading = snapshot.data?.heading;
+
+                    // إن لم تتوفر البوصلة نستخدم زاوية ثابتة افتراضية لاتجاه القبلة من القاهرة (136 درجة)
+                    double qiblaHeading = heading != null ? (136 - heading) : 136;
+
+                    return Column(
                       children: [
-                        Icon(Icons.navigation, size: 48, color: AppColors.primaryGreen),
-                        SizedBox(height: 4),
+                        Transform.rotate(
+                          angle: (qiblaHeading * (math.pi / 180)),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 140,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.primaryGreen.withOpacity(0.08),
+                                  border: Border.all(color: AppColors.primaryGreen, width: 2),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.navigation,
+                                size: 54,
+                                color: AppColors.primaryGreen,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                         Text(
-                          '136° SE',
-                          style: TextStyle(
+                          heading != null
+                              ? '${heading.toInt()}° (اتجاه الكعبة 136° SE)'
+                              : '136° SE (اتجاه مكة المكرمة)',
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: AppColors.accentGold,
                           ),
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                const SizedBox(height: 12),
+
+                const SizedBox(height: 8),
                 const Text(
-                  'وجه هاتفك باتجاه السهم للقبلة',
+                  'ضع الهاتف على سطح مستوٍ لتوجه البوصلة',
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -87,9 +113,9 @@ class PrayerTab extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // 2. Prayer Times List
+          // 2. Local Accurate Prayer Times List
           const Text(
-            'مواقيت الصلاة لليوم',
+            'مواقيت الصلاة الدقيقة (حساب محلي)',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

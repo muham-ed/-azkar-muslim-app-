@@ -8,11 +8,13 @@ import 'providers/prayer_provider.dart';
 import 'providers/quran_provider.dart';
 import 'providers/theme_provider.dart';
 
+import 'services/notification_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/main_navigation_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
   runApp(const MyApp());
 }
 

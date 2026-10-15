@@ -12,16 +12,24 @@
 .swiftpm/
 migrate_working_dir/
 
+# Gradle & Build artifacts
+.gradle/
+**/android/.gradle/
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Temporary non-flutter files
+server.js
+setup_db.js
+flutter.create
+"هيكل المشروع"
+
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -38,8 +46,3 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
