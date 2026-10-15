@@ -1,0 +1,31 @@
+azkar_muslim/
+├── android/                          # مجلد خاص بنظام Android (يُدار تلقائياً)
+│   ├── app/
+│   │   ├── src/
+│   │   │   ├── main/
+│   │   │   │   ├── AndroidManifest.xml   # (يمكن تعديله للصلاحيات أو الأيقونة)
+│   │   │   │   └── res/                  # موارد Android (أيقونات، صور)
+│   │   └── build.gradle                  # إعدادات Gradle (targetSdk، إلخ)
+│   └── gradle/
+├── ios/                              # مجلد خاص بنظام iOS (يُدار تلقائياً)
+│   ├── Runner/
+│   │   ├── Info.plist                # إعدادات التطبيق (الاسم، الإصدار، الصلاحيات)
+│   │   └── Assets.xcassets/          # أيقونات iOS
+│   └── Podfile                       # لإدارة التبعيات في iOS (CocoaPods)
+├── lib/                              # 📂 كل كود Dart الخاص بالتطبيق
+│   ├── main.dart                     # نقطة الدخول الرئيسية
+│   ├── models/                       # نماذج البيانات
+│   │   └── dhikr.dart
+│   ├── providers/                    # إدارة الحالة (State Management)
+│   │   └── dhikr_provider.dart
+│   ├── screens/                      # شاشات التطبيق
+│   │   ├── home_screen.dart
+│   │   └── category_screen.dart
+│   └── widgets/                      # عناصر واجهة قابلة لإعادة الاستخدام
+│       └── dhikr_card.dart
+├── assets/                           # ملفات ثابتة (صور، خطوط، إلخ)
+│   └── fonts/                        # (اختياري) لإضافة خط عربي مثل Cairo
+├── test/                             # اختبارات الوحدة
+│   └── widget_test.dart
+├── pubspec.yaml                      # ملف الاعتماديات والموارد
+└── README.md                         # (اختياري) شرح المشروع
